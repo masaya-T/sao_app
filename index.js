@@ -28,6 +28,13 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
     // イベントオブジェクトを順次処理。
     req.body.events.forEach((event) => {
+        var date = new Date();
+        var year = date.getFullYear();	// 年
+        var month = date.getMonth() + 1;	// 月
+        var day = date.getDate();	// 日
+        var hour = date.getHours();	// 時
+        var minute = date.getMinutes();	// 分
+        var second = date.getSeconds();	// 秒
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text") {
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
@@ -36,7 +43,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: today
+                    text: '${year}-${month}-${day} ${hour}:${minute}:${second}'
                 }));
             }
         }
