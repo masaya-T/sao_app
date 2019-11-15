@@ -37,7 +37,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         var second = date.getSeconds();	// 秒
         events_processed.push(bot.replyMessage(event.replyToken, {
             type: "text",
-            text: event.message.text+'!!'
+            text: event.message.text+'?'
         }));
         events_processed.push(bot.replyMessage(event.replyToken, {
             "type": "bubble",
