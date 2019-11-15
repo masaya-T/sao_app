@@ -39,7 +39,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             type: "text",
             text: event.message.text+'?'
         }));
-        events_processed.push(bot.replyMessage(event.replyToken, {
+        events_processed.push(bot.replyMessage(event.replyToken,{
             "type": "bubble",
             "styles": {
                 "footer": {
