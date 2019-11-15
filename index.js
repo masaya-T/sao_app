@@ -48,9 +48,9 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         calender=make_calender()
 
         events_processed.push(bot.replyMessage(event.replyToken, {
-            "type": "flex",
-            "altText": "this is a flex message",
-            "contents": calender[0]
+            "type": calendar[0]["type"],
+            "altText": calendar[0]["altText"],
+            "contents": calender[0]["contents"]
         }));
     });
 
