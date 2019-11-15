@@ -35,49 +35,45 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         var hour = date.getHours();	// 時
         var minute = date.getMinutes();	// 分
         var second = date.getSeconds();	// 秒
-        events_processed.push(bot.replyMessage(event.replyToken, {
+        // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
+        if (event.type == "message" && event.message.type == "text") {
+            // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
+            if (event.message.text == "こんにちは") {
+                var today = new Date();
+                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+                events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
                     text: event.message.text
                 }));
-        // // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
-        // if (event.type == "message" && event.message.type == "text") {
-        //     // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
-        //     if (event.message.text == "こんにちは") {
-        //         var today = new Date();
-        //         // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-        //         events_processed.push(bot.replyMessage(event.replyToken, {
-        //             type: "text",
-        //             text: year
-        //         }));
-        //     }
-        // }
-        events_processed.push(bot.replyMessage(event.replyToken, {
-            "type": "template",
-            "altText": "this is a buttons template",
-            "template": {
-                "type": "buttons",
-                "actions": [
-                    {
-                        "type": "message",
-                        "label": "アクション 1",
-                        "text": "アクション 1"
-                    },
-                    {
-                        "type": "message",
-                        "label": "アクション 2",
-                        "text": "アクション 2"
-                    },
-                    {
-                        "type": "message",
-                        "label": "アクション 3",
-                        "text": "アクション 3"
-                    }
-                ],
-                "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
-                "title": "タイトルです",
-                "text": "テキストです"
             }
-        }))
+        }
+        // events_processed.push(bot.replyMessage(event.replyToken, {
+        //     "type": "template",
+        //     "altText": "this is a buttons template",
+        //     "template": {
+        //         "type": "buttons",
+        //         "actions": [
+        //             {
+        //                 "type": "message",
+        //                 "label": "アクション 1",
+        //                 "text": "アクション 1"
+        //             },
+        //             {
+        //                 "type": "message",
+        //                 "label": "アクション 2",
+        //                 "text": "アクション 2"
+        //             },
+        //             {
+        //                 "type": "message",
+        //                 "label": "アクション 3",
+        //                 "text": "アクション 3"
+        //             }
+        //         ],
+        //         "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+        //         "title": "タイトルです",
+        //         "text": "テキストです"
+        //     }
+        // }))
     });
 
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
