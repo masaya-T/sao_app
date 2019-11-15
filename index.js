@@ -35,10 +35,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         var hour = date.getHours();	// 時
         var minute = date.getMinutes();	// 分
         var second = date.getSeconds();	// 秒
-        return client.replyMessage(this.line.replyToken, {
+        return events_processed.push(bot.replyMessage(this.line.replyToken, {
             type: 'text',
             text: text
-        });
+        }));
         // // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         // if (event.type == "message" && event.message.type == "text") {
         //     // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
