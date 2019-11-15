@@ -36,36 +36,36 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         var minute = date.getMinutes();	// 分
         var second = date.getSeconds();	// 秒
         events_processed.push(bot.replyMessage(event.replyToken, {
-                    type: "text",
-                    text: event.message.text
-            }));
-        // events_processed.push(bot.replyMessage(event.replyToken, {
-        //     "type": "template",
-        //     "altText": "this is a buttons template",
-        //     "template": {
-        //         "type": "buttons",
-        //         "actions": [
-        //             {
-        //                 "type": "message",
-        //                 "label": "アクション 1",
-        //                 "text": "アクション 1"
-        //             },
-        //             {
-        //                 "type": "message",
-        //                 "label": "アクション 2",
-        //                 "text": "アクション 2"
-        //             },
-        //             {
-        //                 "type": "message",
-        //                 "label": "アクション 3",
-        //                 "text": "アクション 3"
-        //             }
-        //         ],
-        //         "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
-        //         "title": "タイトルです",
-        //         "text": "テキストです"
-        //     }
-        // }))
+            type: "text",
+            text: event.message.text
+        }));
+        events_processed.push(bot.replyMessage(event.replyToken, {
+            "type": "template",
+            "altText": "this is a buttons template",
+            "template": {
+                "type": "buttons",
+                "actions": [
+                    {
+                        "type": "message",
+                        "label": "アクション 1",
+                        "text": "アクション 1"
+                    },
+                    {
+                        "type": "message",
+                        "label": "アクション 2",
+                        "text": "アクション 2"
+                    },
+                    {
+                        "type": "message",
+                        "label": "アクション 3",
+                        "text": "アクション 3"
+                    }
+                ],
+                "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+                "title": "タイトルです",
+                "text": "テキストです"
+            }
+        }))
     });
 
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
