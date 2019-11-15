@@ -2,7 +2,7 @@
 // モジュールのインポート
 const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
-import {make_calender} from 'make_calender'
+import {make_calendar} from 'make_calendar'
 // -----------------------------------------------------------------------------
 // パラメータ設定
 const line_config = {
@@ -45,12 +45,12 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 ]
             }
         };
-        calender=make_calender()
+        calendar=make_calendar()
 
         events_processed.push(bot.replyMessage(event.replyToken, {
             "type": calendar[0]["type"],
             "altText": calendar[0]["altText"],
-            "contents": calender[0]["contents"]
+            "contents": calendar[0]["contents"]
         }));
     });
 
