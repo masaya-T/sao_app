@@ -35,59 +35,59 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         var hour = date.getHours();	// 時
         var minute = date.getMinutes();	// 分
         var second = date.getSeconds();	// 秒
-        // events_processed.push(bot.replyMessage(event.replyToken, {
-        //     type: "text",
-        //     text: event.message.text+'!!'
-        // }));
         events_processed.push(bot.replyMessage(event.replyToken, {
-            "type": "flex",
-            "altText": "hogehoge",
-            "contents": {
-                "type": "bubble",
-                "styles": {
-                    "header": {
-                        "backgroundColor": "#ff62ae"
+            type: "text",
+            text: event.message.text+'!!'
+        }));
+        events_processed.push(bot.replyMessage(event.replyToken, {
+            type: "flex",
+            altText: "hogehoge",
+            contents: {
+                type: "bubble",
+                styles: {
+                    header: {
+                        backgroundColor: "#ff62ae"
                     },
-                    "body": {
-                        "backgroundColor": "#5bff54"
+                    body: {
+                        backgroundColor: "#5bff54"
                     },
-                    "footer": {
-                        "backgroundColor": "#7b78ff"
+                    footer: {
+                        backgroundColor: "#7b78ff"
                     }
                 },
-                "header": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
+                header: {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
                         {
-                            "type": "text",
-                            "text": "header"
+                            type: "text",
+                            text: "header"
                         }
                     ]
                 },
-                "hero": {
-                    "type": "image",
-                    "url": "<imageUrl>",
-                    "size": "full",
-                    "aspectRatio": "1:1"
+                hero: {
+                    type: "image",
+                    url: "<imageUrl>",
+                    size: "full",
+                    aspectRatio: "1:1"
                 },
-                "body": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
+                body: {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
                         {
-                            "type": "text",
-                            "text": "body"
+                            type: "text",
+                            text: "body"
                         }
                     ]
                 },
-                "footer": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
+                footer: {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
                         {
-                            "type": "text",
-                            "text": "footer"
+                            type: "text",
+                            text: "footer"
                         }
                     ]
                 }
