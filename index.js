@@ -28,14 +28,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
     // イベントオブジェクトを順次処理。
     req.body.events.forEach((event) => {
-        var date = new Date();
-        var year = date.getFullYear();	// 年
-        var month = date.getMonth() + 1;	// 月
-        var day = date.getDate();	// 日
-        var hour = date.getHours();	// 時
-        var minute = date.getMinutes();	// 分
-        var second = date.getSeconds();	// 秒
-
         const namami = {
             "type": "bubble",
             "body": {
@@ -53,15 +45,12 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 ]
             }
         };
+        calender=make_calender()
 
-        events_processed.push(bot.replyMessage(event.replyToken, {
-            type: "text",
-            text: event.message.text+'?'
-        }));
         events_processed.push(bot.replyMessage(event.replyToken, {
             "type": "flex",
             "altText": "this is a flex message",
-            "contents": namami
+            "contents": calender
         }));
     });
 
@@ -71,5 +60,37 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             console.log(`${response.length} event(s) processed.`);
         }
     );
-    return response;
+
 });
+
+function make_calender (){
+    var date = new Date();
+    var year = date.getFullYear();	// 年
+    var month = date.getMonth() + 1;	// 月
+    var day = date.getDate();	// 日
+
+    calender=[
+        {
+            "type": "bubble",
+            "styles": {
+                "footer": {
+                    "separator": true
+                }
+            },
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": []
+            }
+        }
+    ]
+    contents=[{
+        "type": "text",
+        "text": month,
+        "weight": "bold",
+        "color": "#1db446",
+        "size": "md"
+    }]
+    calender.body.contents.push({contents:contents})
+    return calender
+}
