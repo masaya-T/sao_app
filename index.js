@@ -35,10 +35,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         var hour = date.getHours();	// 時
         var minute = date.getMinutes();	// 分
         var second = date.getSeconds();	// 秒
-        events_processed.push(bot.replyMessage(event.replyToken, {
-            type: "text",
-            text: event.message.text
-        }));
+        // events_processed.push(bot.replyMessage(event.replyToken, {
+        //     type: "text",
+        //     text: event.message.text+'!!'
+        // }));
         events_processed.push(bot.replyMessage(event.replyToken, {
             "type": "flex",
             "altText": "hogehoge",
