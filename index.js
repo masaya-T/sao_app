@@ -40,32 +40,59 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             text: event.message.text
         }));
         events_processed.push(bot.replyMessage(event.replyToken, {
-            "type": "template",
-            "altText": "this is a buttons template",
-            "template": {
-                "type": "buttons",
-                "actions": [
-                    {
-                        "type": "message",
-                        "label": "アクション 1",
-                        "text": "アクション 1"
+            "type": "flex",
+            "altText": "hogehoge",
+            "contents": {
+                "type": "bubble",
+                "styles": {
+                    "header": {
+                        "backgroundColor": "#ff62ae"
                     },
-                    {
-                        "type": "message",
-                        "label": "アクション 2",
-                        "text": "アクション 2"
+                    "body": {
+                        "backgroundColor": "#5bff54"
                     },
-                    {
-                        "type": "message",
-                        "label": "アクション 3",
-                        "text": "アクション 3"
+                    "footer": {
+                        "backgroundColor": "#7b78ff"
                     }
-                ],
-                "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
-                "title": "タイトルです",
-                "text": "テキストです"
+                },
+                "header": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "header"
+                        }
+                    ]
+                },
+                "hero": {
+                    "type": "image",
+                    "url": "<imageUrl>",
+                    "size": "full",
+                    "aspectRatio": "1:1"
+                },
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "body"
+                        }
+                    ]
+                },
+                "footer": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "footer"
+                        }
+                    ]
+                }
             }
-        }))
+        }));
     });
 
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
