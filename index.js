@@ -47,11 +47,11 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 "contents": [
                     {
                         "type": "text",
-                        "text": event.message.text + '?'
+                        "text": event.message.text + "?"
                     },
                     {
                         "type": "text",
-                        "text": event.message.text + '!!'
+                        "text": event.message.text + "!!"
                     }
                 ]
             }
