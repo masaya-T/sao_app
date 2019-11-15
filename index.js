@@ -50,7 +50,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         events_processed.push(bot.replyMessage(event.replyToken, {
             "type": "flex",
             "altText": "this is a flex message",
-            "contents": calender
+            "contents": calender[0]
         }));
     });
 
