@@ -35,6 +35,25 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         var hour = date.getHours();	// 時
         var minute = date.getMinutes();	// 分
         var second = date.getSeconds();	// 秒
+
+        const namami = {
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": event.message.text + "?"
+                    },
+                    {
+                        "type": "text",
+                        "text": event.message.text + "!!"
+                    }
+                ]
+            }
+        };
+
         events_processed.push(bot.replyMessage(event.replyToken, {
             type: "text",
             text: event.message.text+'?'
@@ -42,23 +61,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         events_processed.push(bot.replyMessage(event.replyToken, {
             "type": "flex",
             "altText": "this is a flex message",
-            "contents":{
-                "type": "bubble",
-                "body": {
-                    "type": "box",
-                    "layout": "horizontal",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": event.message.text + "?"
-                        },
-                        {
-                            "type": "text",
-                            "text": event.message.text + "!!"
-                        }
-                    ]
-                }
-            }
+            "contents": namami
         }));
     });
 
