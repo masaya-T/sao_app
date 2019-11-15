@@ -1,51 +1,67 @@
-const express = require('express');
-const linebot = require('@line/bot-sdk');
-const config = {
-    channelAccessToken: process.env.YOUR_CHANNEL_ACCESS_TOKEN,
-    channelSecret: process.env.YOUR_CHANNEL_SECRET
+// -----------------------------------------------------------------------------
+// モジュールのインポート
+const server = require("express")();
+const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
+
+// -----------------------------------------------------------------------------
+// パラメータ設定
+const line_config = {
+    channelAccessToken: process.env.LINE_ACCESS_TOKEN, // 環境変数からアクセストークンをセットしています
+    channelSecret: process.env.LINE_CHANNEL_SECRET // 環境変数からChannel Secretをセットしています
 };
-const app = express();
 
-app.set('port', (process.env.PORT || 3030));
-app.post('/', linebot.middleware(config), (req, res) => {
-    Promise
-        .all(req.body.events.map(handleEvent))
-        .then(result => res.json(result));
-});
+// -----------------------------------------------------------------------------
+// Webサーバー設定
+server.listen(process.env.PORT || 3000);
 
-const client = new linebot.Client(config);
-function handleEvent(event) {
-    this.line = event;
-    switch (event.type) {
-        case 'message':
-            messageEvent();
-            break;
-        case 'follow':
-            followEvent();
-            break;
-        case 'unfollow':
-            unfollowEvent();
-            break;
-        default:
-            return Promise.resolve(null);
-    }
-}
+// APIコールのためのクライアントインスタンスを作成
+const bot = new line.Client(line_config);
 
-function messageEvent() {
-    const {
-        type,
-        text,
-    } = this.line.message;
+// -----------------------------------------------------------------------------
+// ルーター設定
+server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
+    // 先行してLINE側にステータスコード200でレスポンスする。
+    res.sendStatus(200);
 
-    if (type !== 'text') {
-        return Promise.resolve(null);
-    }
-    return client.replyMessage(this.line.replyToken, {
-        type: 'text',
-        text: text
+    // すべてのイベント処理のプロミスを格納する配列。
+    let events_processed = [];
+
+    // イベントオブジェクトを順次処理。
+    req.body.events.forEach((event) => {
+        var date = new Date();
+        var year = date.getFullYear();	// 年
+        var month = date.getMonth() + 1;	// 月
+        var day = date.getDate();	// 日
+        var hour = date.getHours();	// 時
+        var minute = date.getMinutes();	// 分
+        var second = date.getSeconds();	// 秒
+        events_processed.push(bot.replyMessage(event.replyToken, {
+            type: "text",
+            text: event.message.text+'?'
+        }));
+        events_processed.push(bot.replyMessage(event.replyToken,{
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": event.message.text + '?'
+                    },
+                    {
+                        "type": "text",
+                        "text": event.message.text + '!!'
+                    }
+                ]
+            }
+        }));
     });
-}
 
-app.listen(app.get('port'), function () {
-    console.log('Node app is running -> port:', app.get('port'));
+    // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
+    Promise.all(events_processed).then(
+        (response) => {
+            console.log(`${response.length} event(s) processed.`);
+        }
+    );
 });
