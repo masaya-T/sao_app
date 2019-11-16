@@ -1,4 +1,4 @@
-export default function make_calendar() {
+export function make_calendar() {
     let date = new Date();
     let year = date.getFullYear();	// 年
     let month = date.getMonth() + 1;	// 月
