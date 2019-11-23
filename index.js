@@ -35,7 +35,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 let text=event.message.text.split(' ')
                 if (text.length==1){
                     let date = new Date();
-                    calendar = show_calendar(date.getFullYear(),date.getMonth())
+                    calendar = show_calendar(date.getFullYear(),date.getMonth()+1)
                 }
                 else if (text.length == 2) {
                     let date = new Date();
@@ -44,7 +44,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 else if (text.length == 3) {
                     calendar = show_calendar(text[1], text[2])
                 }
-
+                console.log(date.getMonth() + 1)
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     "type": calendar[0]["type"],
                     "altText": calendar[0]["altText"],
@@ -74,7 +74,7 @@ function show_calendar(input_year, input_month) {
     let day = date.getDate();	// 日
     let last_day = new Date(year, month, 0).getDate()
     const fs = require('fs');
-
+    console.log(month.toString())
     // jsonファイル読み込み
     let file_path = year.toString() + month.toString() + '.json'
     try {
