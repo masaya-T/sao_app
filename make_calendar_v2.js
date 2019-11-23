@@ -1,13 +1,24 @@
-function make_calendar() {
+function show_calendar(input_year,input_month) {
     let date = new Date();
-    let year = date.getFullYear();	// 年
-    let month = date.getMonth() + 1;	// 月
+    let year = input_year;	// 年
+    let month = input_month ;	// 月
     let day = date.getDate();	// 日
     let last_day = new Date(year, month, 0).getDate()
+    const fs = require('fs');
+
+    // jsonファイル読み込み
+    let file_path = year.toString() + month.toString()+ '.json'
+    try {
+        let jsonObject = JSON.parse(fs.readFileSync(file_path, 'utf8'));
+    }
+    catch{
+        init_dataset(year, month)
+    }
+    let jsonObject = JSON.parse(fs.readFileSync(file_path, 'utf8'));
 
     contents = []
     calendar = []
-
+    // 
     for (i = 0; i < new Date(year, month - 1, 1).getDay(); i++) {
         contents.push({
             type: "text",
@@ -21,22 +32,29 @@ function make_calendar() {
     for (i = 1; i < last_day + 1; i++) {
         var userDate = new Date(year, month - 1, i)
         var weekday = userDate.getDay()
-
+        var backgroundColor ='#FFFFFF'
         if (i == day) color = "#1db446"
         else if (weekday == 0) color = "#ff0000"
         else if (weekday == 6) color = "#0000ff"
         else color = '#000000'
-
+        if (jsonObject[i] == true) backgroundColor = '#ffff00'
+        console.log(backgroundColor)
         day_contents = {
-            type: "text",
-            text: i.toString(),
-            size: "sm",
-            color: color,
-            align: "center",
-            gravity: "center"
+            "type": "box",
+            "layout": "horizontal",
+            "margin": "md",
+            "backgroundColor": backgroundColor,
+            "contents": [{
+                type: "text",
+                text: i.toString(),
+                size: "sm",
+                color: color,
+                align: "center",
+                gravity: "center"
+            }]
         }
         contents.push(day_contents)
-        console.log(i, weekday)
+        // console.log(i, weekday)
         if (weekday != 6) contents.push({ type: "separator" })
 
         if (i == last_day) {
@@ -120,6 +138,7 @@ function make_calendar() {
     )
     return contents
 }
+// 一週間を日本語に
 function weekday_header() {
     weekdays = ['日', '月', '火', '水', '木', '金', '土']
     header = []
@@ -139,3 +158,50 @@ function weekday_header() {
     }
     return header
 }
+
+// 洗濯した日にちを保存
+function add_laundry_data(){
+    const fs = require('fs');
+
+    let date = new Date();
+    let year = date.getFullYear();	// 年
+    let month = date.getMonth()+1;	// 月
+    let day=date.getDate()
+    let file_path = year.toString() + month.toString() + '.json'
+    try{
+        let jsonObject = JSON.parse(fs.readFileSync(file_path, 'utf8'));
+    }
+    catch{
+        init_dataset(year, month)
+    }
+    let jsonObject = JSON.parse(fs.readFileSync(file_path, 'utf8'));
+
+    jsonObject[day]=true
+    
+    fs.writeFileSync(file_path, JSON.stringify(jsonObject, null, '    '), function (err, result) {
+        if (err) console.log('error', err);
+    });
+}
+
+// カレンダーの作成
+function init_dataset(year,m){
+    var fr = require('fs');
+    var datas={}
+
+    var last_day = new Date(year, m, 0).getDate()
+    for(d=1;d<=last_day;d++){
+        datas[d]=false
+    }
+    // console.log(datas)
+    fr.writeFileSync(year.toString()+m.toString()+'.json', JSON.stringify(datas, null, '    '), function (err, result) {
+        if (err) console.log('error', err);
+    });
+}
+
+
+// init_dataset(2019,11)
+add_laundry_data()
+// show_calendar(2019,11)
+contents=show_calendar(2019,11)
+
+console.log(JSON.stringify(contents))

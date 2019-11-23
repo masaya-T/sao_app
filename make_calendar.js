@@ -139,3 +139,7 @@ function weekday_header() {
     }
     return header
 }
+
+function add_laundry_data(){
+
+}
