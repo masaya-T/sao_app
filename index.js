@@ -25,26 +25,28 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
     // すべてのイベント処理のプロミスを格納する配列。
     let events_processed = [];
-    // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
-    if (event.type == "message" && event.message.type == "text") {
-        // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
-        if (event.message.text == "カレンダー") {
-            console.log(event.message.text)
-            calendar = show_calendar("2019", "11")
-            console.log(calendar[0])
-            events_processed.push(bot.replyMessage(event.replyToken, {
-                "type": calendar[0]["type"],
-                "altText": calendar[0]["altText"],
-                "contents": calendar[0]["contents"]
-            }));
+    // イベントオブジェクトを順次処理。
+    req.body.events.forEach((event) => {
+        // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
+        if (event.type == "message" && event.message.type == "text") {
+            // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
+            if (event.message.text == "カレンダー") {
+                console.log(event.message.text)
+                calendar = show_calendar("2019", "11")
+                console.log(calendar[0])
+                events_processed.push(bot.replyMessage(event.replyToken, {
+                    "type": calendar[0]["type"],
+                    "altText": calendar[0]["altText"],
+                    "contents": calendar[0]["contents"]
+                }));
+            }
+            // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
+            if (event.message.text == "雨") {
+                if_rain(bot,event)
+            }
+            
         }
-        // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
-        if (event.message.text == "雨") {
-            if_rain(bot,event)
-        }
-        
-    }
-
+    });
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
     Promise.all(events_processed).then(
         (response) => {
