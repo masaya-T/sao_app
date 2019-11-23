@@ -45,8 +45,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 ]
             }
         };
-        calendar=show_calendar()
-
+        calendar = show_calendar("2019", "11")
+        console.log(calendar[0])
         events_processed.push(bot.replyMessage(event.replyToken, {
             "type": calendar[0]["type"],
             "altText": calendar[0]["altText"],
@@ -103,7 +103,6 @@ function show_calendar(input_year, input_month) {
         else if (weekday == 6) color = "#0000ff"
         else color = '#000000'
         if (jsonObject[i] == true) backgroundColor = '#ffff00'
-        console.log(backgroundColor)
         day_contents = {
             "type": "box",
             "layout": "horizontal",
