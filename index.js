@@ -73,7 +73,7 @@ function show_calendar(input_year, input_month) {
     let day = date.getDate();	// 日
     let last_day = new Date(year, month, 0).getDate()
     const fs = require('fs');
-    console.log(month.toString())
+    console.log(month-1)
     // jsonファイル読み込み
     let file_path = year.toString() + month.toString() + '.json'
     try {
