@@ -40,7 +40,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         }
         // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
         if (event.message.text == "雨") {
-            if_rain()
+            if_rain(event)
         }
         
     }
@@ -253,7 +253,7 @@ function init_dataset(year, m) {
     });
 }
 // 雨が降りそう
-function if_rain(){
+function if_rain(event){
     // replyMessage()で返信し、そのプロミスをevents_processedに追加。
     events_processed.push(bot.replyMessage(event.replyToken, {
         type: "text",
