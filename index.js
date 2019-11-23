@@ -30,10 +30,21 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text") {
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
-            if (event.message.text == "カレンダー") {
+            if (event.message.text.match("カレンダー")) {
                 console.log(event.message.text)
-                calendar = show_calendar("2019", "11")
-                console.log(calendar[0])
+                let text=event.message.text.split(' ')
+                if (text.length==1){
+                    let date = new Date();
+                    calendar = show_calendar(date.getFullYear(),date.getMonth())
+                }
+                else if (text.length == 2) {
+                    let date = new Date();
+                    calendar = show_calendar(text[1],date.getMonth()+1)
+                }
+                else if (text.length == 3) {
+                    calendar = show_calendar(text[1], text[2])
+                }
+
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     "type": calendar[0]["type"],
                     "altText": calendar[0]["altText"],
