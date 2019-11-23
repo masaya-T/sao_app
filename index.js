@@ -40,7 +40,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         }
         // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
         if (event.message.text == "雨") {
-            if_rain(event)
+            if_rain(bot,event)
         }
         
     }
@@ -253,15 +253,15 @@ function init_dataset(year, m) {
     });
 }
 // 雨が降りそう
-function if_rain(event){
+function if_rain(bot,event){
     // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-    events_processed.push(bot.replyMessage(event.replyToken, {
+    bot.replyMessage(event.replyToken, {
         type: "text",
         text: "雨が降りそうです"
     },{
         type: 'image',
         originalContentUrl: './lena.png',
         previewImageUrl: './lena.png'
-    }));
+    });
 
 }
