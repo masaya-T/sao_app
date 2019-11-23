@@ -44,7 +44,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 else if (text.length == 3) {
                     calendar = show_calendar(text[1], text[2])
                 }
-                console.log(date.getMonth() + 1)
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     "type": calendar[0]["type"],
                     "altText": calendar[0]["altText"],
