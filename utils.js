@@ -1,3 +1,5 @@
+const https = require('https');
+
 function show_calendar(input_year, input_month) {
     let date = new Date();
     let year = input_year;	// 年
@@ -232,6 +234,40 @@ function if_rain(bot,event){
     })
 }
 
+async function getWeather (latitude,longitude) {
+
+    const yahoo_id = process.env.YAHOO_APPLICATION_ID;
+
+    return new Promise((resolve,reject) => {
+        const URL = "/weather/V1/place?coordinates=" + latitude + "," +  longitude + "&output=json&appid=" + yahoo_id;
+        let receivedData = {"Data":"None"};
+
+        const options = {
+            protocol: 'https:',
+            host: 'map.yahooapis.jp',
+            path: URL,
+            method: 'GET',
+        };
+
+        const req = https.request(options, (res) => {
+            res.on('data', (data) => {
+                receivedData = JSON.parse(data);
+                receivedData = receivedData["Feature"][0]["Property"]["WeatherList"]["Weather"][0]["Rainfall"];
+            });
+            res.on('end', () => {
+                console.log('No more data in response.');
+                resolve(receivedData);
+            });
+        })
+        req.on('error', (e) => {
+        console.error(`problem with request:`);
+        reject(`problem with request:`);
+        });
+        req.end();
+    });
+}
+
 exports.show_calendar = show_calendar;
 exports.if_rain = if_rain;
 exports.add_laundry_data = add_laundry_data;
+exports.getWeather = getWeather;

@@ -49,10 +49,21 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     "altText": calendar[0]["altText"],
                     "contents": calendar[0]["contents"]
                 }));
-            }
-            // ユーザーからのテキストメッセージが「雨」だった場合のみ反応。
-            if (event.message.text == "雨") {
-                utils.if_rain(bot,event)
+
+            }else if (event.message.text == "雨") {
+                const latitude  = "136.9745761";
+                const longitude = "35.1355294";
+                let weather = "none";
+
+                (async () => {
+                    weather = await utils.getWeather(latitude,longitude);
+        
+                    events_processed.push(bot.replyMessage(event.replyToken, {
+                        type: "text",
+                        text: weather.toString()
+                    }));
+                })();
+                //utils.if_rain(bot,event)
             }
             
         }
