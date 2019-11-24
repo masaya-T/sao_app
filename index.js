@@ -275,7 +275,7 @@ function if_rain(bot,event){
             "type": "bubble",
             "hero": {
                 "type": "image",
-                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
+                "url": "https://github.com/masaya-T/sao_app/blob/master/lena.png",
                 "size": "full",
                 "aspectRatio": "20:13",
                 "aspectMode": "cover",
