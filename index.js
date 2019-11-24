@@ -2,9 +2,7 @@
 // モジュールのインポート
 const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
-const show_calendar = require("./utils/show_calender");
-const if_rain = require("./utils/if_rain");
-
+const utils = require("./utils");
 // -----------------------------------------------------------------------------
 // パラメータ設定
 const line_config = {
@@ -37,14 +35,14 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 let text=event.message.text.split(' ')
                 if (text.length==1){
                     let date = new Date();
-                    calendar = show_calendar(date.getFullYear(),date.getMonth()+1)
+                    calendar = utils.show_calendar(date.getFullYear(),date.getMonth()+1)
                 }
                 else if (text.length == 2) {
                     let date = new Date();
-                    calendar = show_calendar(text[1],date.getMonth()+1)
+                    calendar = utils.show_calendar(text[1],date.getMonth()+1)
                 }
                 else if (text.length == 3) {
-                    calendar = show_calendar(text[1], parseInt(text[2],10))
+                    calendar = utils.show_calendar(text[1], parseInt(text[2],10))
                 }
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     "type": calendar[0]["type"],
@@ -54,7 +52,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             }
             // ユーザーからのテキストメッセージが「雨」だった場合のみ反応。
             if (event.message.text == "雨") {
-                if_rain(bot,event)
+                utils.if_rain(bot,event)
             }
             
         }
