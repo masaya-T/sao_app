@@ -1,6 +1,3 @@
-const init_dataset = require("./init_dataset");
-const weekday_header = require("./weekday_header");
-
 function show_calendar(input_year, input_month) {
     let date = new Date();
     let year = input_year;	// 年
@@ -140,7 +137,101 @@ function show_calendar(input_year, input_month) {
     )
     return contents
 }
+// 一週間を日本語に
+function weekday_header() {
+    weekdays = ['日', '月', '火', '水', '木', '金', '土']
+    header = []
+    for (k = 0; k < weekdays.length; k++) {
+        if (weekdays[k] == '日') color = "#ff0000"
+        else if (weekdays[k] == '土') color = "#0000ff"
+        else color = '#000000'
+        header.push({
+            type: "text",
+            text: weekdays[k],
+            size: "sm",
+            color: color,
+            align: "center"
+        })
 
+        if (weekdays[k] != '土') header.push({ type: "separator" })
+    }
+    return header
+}
 
+// 洗濯した日にちを保存
+function add_laundry_data() {
+    const fs = require('fs');
 
-module.exports.show_calendar = show_calendar;
+    let date = new Date();
+    let year = date.getFullYear();	// 年
+    let month = date.getMonth() + 1;	// 月
+    let day = date.getDate()
+    let file_path = year.toString() + month.toString() + '.json'
+    try {
+        let jsonObject = JSON.parse(fs.readFileSync(file_path, 'utf8'));
+    }
+    catch{
+        init_dataset(year, month)
+    }
+    let jsonObject = JSON.parse(fs.readFileSync(file_path, 'utf8'));
+
+    jsonObject[day] = true
+
+    fs.writeFileSync(file_path, JSON.stringify(jsonObject, null, '    '), function (err, result) {
+        if (err) console.log('error', err);
+    });
+}
+
+// カレンダーの作成
+function init_dataset(year, m) {
+    var fr = require('fs');
+    var datas = {}
+
+    var last_day = new Date(year, m, 0).getDate()
+    for (d = 1; d <= last_day; d++) {
+        datas[d] = false
+    }
+    // console.log(datas)
+    fr.writeFileSync(year.toString() + m.toString() + '.json', JSON.stringify(datas, null, '    '), function (err, result) {
+        if (err) console.log('error', err);
+    });
+}
+// 雨が降りそう
+function if_rain(bot,event){
+    // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+    bot.replyMessage(event.replyToken, {
+        // events_processed.push(bot.replyMessage(event.replyToken,{
+        "type": "flex",
+        "altText": "雨",
+        "contents": {
+            "type": "bubble",
+            "hero": {
+                "type": "image",
+                "url": "https://www.techscore.com/blog/wp/wp-content/uploads/2016/12/gopher_ueda.png",
+                "size": "full",
+                "aspectRatio": "20:13",
+                "aspectMode": "cover",
+                "action": {
+                    "type": "uri",
+                    "uri": "http://linecorp.com/"
+                }
+            },
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "雨が降りそうです",
+                        "weight": "bold",
+                        "size": "xl"
+                    }
+                ]
+            }
+        }
+    })
+}
+
+exports.show_calendar = show_calendar;
+exports.if_rain = if_rain;
+exports.add_laundry_data = add_laundry_data;
