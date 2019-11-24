@@ -275,7 +275,7 @@ function if_rain(bot,event){
             "type": "bubble",
             "hero": {
                 "type": "image",
-                "url": "https://github.com/masaya-T/sao_app/blob/master/lena.png",
+                "url": "https://www.techscore.com/blog/wp/wp-content/uploads/2016/12/gopher_ueda.png",
                 "size": "full",
                 "aspectRatio": "20:13",
                 "aspectMode": "cover",
