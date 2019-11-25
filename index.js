@@ -80,7 +80,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 });
 
 //仮のpostサーバ
-server.post('/api/v1/yagijin', function (req, res) {
+server.get('/api/v1/yagijin', function (req, res) {
     const message = {
         type: 'text',
         text: 'You are Yagijin.'
