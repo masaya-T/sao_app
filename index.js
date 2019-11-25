@@ -10,6 +10,8 @@ const line_config = {
     channelSecret: process.env.LINE_CHANNEL_SECRET // 環境変数からChannel Secretをセットしています
 };
 
+const yagi_line_id = process.env.YAGI_LINE_ID;
+
 // -----------------------------------------------------------------------------
 // Webサーバー設定
 server.listen(process.env.PORT || 3000);
@@ -76,3 +78,18 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     );
 
 });
+
+//仮のpostサーバ
+server.post('/api/v1/yagijin', function (req, res) {
+    const message = {
+        type: 'text',
+        text: 'You are Yagijin.'
+    };
+    client.pushMessage(yagi_line_id, message)
+        .then(() => {
+            res.send('Success to send a message to Yagijin')
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+})
