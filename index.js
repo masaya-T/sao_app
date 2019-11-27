@@ -92,8 +92,9 @@ server.post('/api/v1/photo', function (req, res) {
 
     const message = {
         type: 'image',
-        originalContentUrl: photo,
-        previewImageUrl: 'https://i.gyazo.com/e772c3b48a07716226f7184d7f417cda.png'
+        text: photo
+        //originalContentUrl: photo,
+        //previewImageUrl: 'https://i.gyazo.com/e772c3b48a07716226f7184d7f417cda.png'
     };
 
     bot.pushMessage(yagi_line_id, message)
@@ -102,5 +103,5 @@ server.post('/api/v1/photo', function (req, res) {
         })
         .catch((err) => {
             console.log(err);
-    });
+        });
 })
