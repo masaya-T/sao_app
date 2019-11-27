@@ -92,7 +92,7 @@ server.post('/api/v1/photo', function (req, res) {
 
     const message = {
         type: 'image',
-        text: photo
+        text: photo.toString()
         //originalContentUrl: photo,
         //previewImageUrl: 'https://i.gyazo.com/e772c3b48a07716226f7184d7f417cda.png'
     };
