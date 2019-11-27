@@ -3,6 +3,7 @@
 const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
 const utils = require("./utils");
+const bodyParser = require('body-parser');
 // -----------------------------------------------------------------------------
 // パラメータ設定
 const line_config = {
@@ -13,11 +14,16 @@ const line_config = {
 const yagi_line_id = process.env.YAGI_LINE_ID;
 
 // -----------------------------------------------------------------------------
-// Webサーバー設定
-server.listen(process.env.PORT || 3000);
+
 
 // APIコールのためのクライアントインスタンスを作成
 const bot = new line.Client(line_config);
+
+server.use('/api/v1/photo', bodyParser.json());
+server.use('/api/v1/photo', bodyParser.urlencoded({ extended: true }));
+
+// Webサーバー設定
+server.listen(process.env.PORT || 3000);
 
 // -----------------------------------------------------------------------------
 // ルーター設定
@@ -80,16 +86,20 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 });
 
 //仮のpostサーバ
-server.get('/api/v1/yagijin', function (req, res) {
+server.post('/api/v1/photo', function (req, res) {
+
+    const photo = req.body.PhotoURL;
+
     const message = {
-        type: 'text',
-        text: 'You are Yagijin.'
+        type: 'image',
+        originalContentUrl: photo
     };
+
     client.pushMessage(yagi_line_id, message)
         .then(() => {
             res.send('Success to send a message to Yagijin')
         })
         .catch((err) => {
             console.log(err);
-        });
+    });
 })
