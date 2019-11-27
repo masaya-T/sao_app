@@ -95,7 +95,7 @@ server.post('/api/v1/photo', function (req, res) {
         originalContentUrl: photo
     };
 
-    client.pushMessage(yagi_line_id, message)
+    bot.pushMessage(yagi_line_id, message)
         .then(() => {
             res.send('Success to send a message to Yagijin')
         })
